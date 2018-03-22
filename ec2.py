@@ -126,12 +126,12 @@ def get_files_in_folder(service, folder):
         fields='nextPageToken, files(id, name)'
     ).execute()
 
-    file_list2 = children['files']
-    return file_list2
+    file_list = children['files']
+    return file_list
 
 
 # register models
-def register_models(files, meta_model_file2, gc2):
+def register_models(files, meta_model_file, gc2):
     all_data = []
     for model in files:
         name = model['name']
@@ -139,7 +139,7 @@ def register_models(files, meta_model_file2, gc2):
         data = get_metadata_from_excel_file_gspread(wb)
         all_data.append(data)
 
-    stream = open(meta_model_file2, 'a')
+    stream = open(meta_model_file, 'a')
     yaml.dump(all_data, stream)
 
 
@@ -147,7 +147,9 @@ def register_models(files, meta_model_file2, gc2):
 def calculate_forecast(first_date, number_of_days, meta_models_file, output_file2, gs):
     # get all metadata
     stream = io.open(meta_models_file, 'r')
-    models = list(yaml.load_all(stream))[0]
+    ttt = yaml.load_all(stream)
+    aaa = list(ttt)
+    models = aaa[0]
     # we get the initial data series forecast from output file
     output_data = read_from_csv(output_file)
 
@@ -201,7 +203,7 @@ DRIVE = discovery.build('drive', 'v3', http=credentials.authorize(Http()))
 gc = gspread.authorize(credentials)
 
 # get Model lists. They are located in Google Drive folder 'models'
-file_list = get_files_in_folder(DRIVE, 'models')
+file_list = get_files_in_folder(DRIVE, 'models_common')
 
 # register models
 

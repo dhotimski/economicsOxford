@@ -1,3 +1,5 @@
+apiclient
+httplib2
 # libraries used
 csv
 yaml
